@@ -1,6 +1,8 @@
 #imports
 
 import time
+import sys
+import numpy as np
 from PIL import Image, ImageEnhance
 import pyautogui
 import pytesseract
@@ -22,14 +24,13 @@ def preprocess_image(image):
     
     # Increase sharpness
     enhancer = ImageEnhance.Sharpness(image)
-    image = enhancer.enhance(2.0)
+    image = enhancer.enhance(1.0)
     image = image.point(lambda x: 255 if x > 180 else 0)
     return image
 
 #Time variables
-duration = 900
+duration = 886
 startTime = time.time()
-
 
 
 #Check for good brainrot
@@ -39,12 +40,11 @@ TARGET_NAMES = [
     "Los Primos",
     "Eviledon",
     "Orcaledon",
-    "Capitano Moby",
-    "Zombie Tralala"
+    "Capitano Moby"
 ]
 def isGoodBrainrot():
     #Take and save a screenshot as a file
-    screenshot = pyautogui.screenshot(region=(824, 174, 300, 300))
+    screenshot = pyautogui.screenshot(region=(700, 50, 300, 700))
     enchanced_image = preprocess_image(screenshot)
     enchanced_image.save("brainRot.png")
     text = pytesseract.image_to_string(enchanced_image, config="--psm 6")
@@ -59,22 +59,44 @@ def isGoodBrainrot():
     #Detect if the target values are there
 
 
-    pass
+def setPostition():
+    pyautogui.moveTo(1270, 1058)
+    pyautogui.click()
+    time.sleep(0.2)
+    pyautogui.moveTo(578, 949)
+    pyautogui.click()
+    time.sleep(20)
+    keyboard.press_and_release('k')
+    
 
 def fishingPart():
-    pyautogui.mouseDown(button='left')
-    time.sleep(0.4)
-    pyautogui.mouseUp(button='left')
-    time.sleep(5)
-    for i in range(41):
+    pyautogui.moveTo(920, 730)
+    time.sleep(0.5)
+    pyautogui.mouseDown()
+    time.sleep(0.45)
+    pyautogui.mouseUp()
+    time.sleep(6.5)
+    for i in range(50):
         pyautogui.click()
-        time.sleep(0.005)
+        time.sleep(0.01)
 
 
+def sellTheBrainrot():
+    keyboard.press_and_release('l')
 
-#MAIN PROGRAM
-#Runs for 15 minutes
-while time.time() - startTime < duration:
-    keyboard.wait('p')
-    isGoodBrainrot()
+while time.time() - startTime < 86400:
+    setPostition()
+    time.sleep(14)
+    #MAIN PROGRAM
+    #Runs for 15 minutes
+    while time.time() - startTime < duration:
+        fishingPart()
+        time.sleep(2.0)
+        if isGoodBrainrot():
+            print("Good brainrot found, stopping macro.")
+            sys.exit()
+        else:
+            sellTheBrainrot()
+            time.sleep(2.0)
+    time.sleep(2700)
     
